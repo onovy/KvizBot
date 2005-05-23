@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment></comment>
+<entry key="db_host"></entry>
+<entry key="db_name"></entry>
+<entry key="db_user"></entry>
+<entry key="db_pass"></entry>
+<entry key="irc_channel"></entry>
+<entry key="irc_server"></entry>
+<entry key="irc_nick"></entry>
+<entry key="irc_pass"></entry>
+<entry key="irc_port"></entry>
+
+<entry key="welcomeMessage"></entry>
+<entry key="welcomeMessage2"></entry>
+</properties>

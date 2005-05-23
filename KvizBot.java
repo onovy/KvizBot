@@ -41,6 +41,7 @@ public class KvizBot {
 			irc_server = prop.getProperty("irc_server");
 			irc_port = Integer.valueOf(prop.getProperty("irc_port"));
 			irc_pass = prop.getProperty("irc_pass");
+			irc_channel = prop.getProperty("irc_channel");
 		} catch (NumberFormatException e2) {
 			System.err.println("Chybný port");
 			System.exit(-1);
