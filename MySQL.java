@@ -50,7 +50,7 @@ public class MySQL {
 	   * @param query query to execute
 	   */
 	  protected void query ( String query )
-	     throws Exception {  
+	     throws SQLException {  
 	  
 	    try {
 	      PreparedStatement s = con.prepareStatement(query);

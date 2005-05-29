@@ -578,6 +578,25 @@ public class IRC extends PircBot {
 			if (rooms.length==0) {
 			    joinChannel(channel);
 			}
+			
+			try {
+				// overeni jestli jiz neprobehly vsechny otazky
+				String query="SELECT COUNT(*) AS pocet FROM otazky WHERE last IS NULL";
+				PreparedStatement ps=mysql.getConn().prepareStatement(query);
+				ResultSet rs=ps.executeQuery();
+				rs.next();
+				int pocet=rs.getInt("pocet");
+				rs.close();
+				ps.close();
+				System.out.println(Integer.toString(pocet));
+				if (pocet==0) {
+			    	sendMessage(channel,"Došli otázky, jedeme od znova!");
+					mysql.query("UPDATE otazky SET last=NULL");
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
 			newOtazka_reall();
         }
     }
