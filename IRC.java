@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Random;
 import java.sql.*;
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -429,34 +430,89 @@ public class IRC extends PircBot {
     	sendMessage(channel,"*29* Nápověda ("+napoveda_num+"/"+napoveda_count+"): "+napoveda+" *29*");
     }
     
+    public int getIdByNick(String nick) throws java.sql.SQLException {
+		String query="SELECT id FROM nicks WHERE LOWER(nick)=LOWER(?)";
+		PreparedStatement ps=mysql.getConn().prepareStatement(query);
+		ps.setString(1,nick);
+		ResultSet rs=ps.executeQuery();
+		rs.next();
+		int id = rs.getInt("id");
+		rs.close();
+		ps.close();
+		return id;
+    }
+    
+    public boolean tableExists(String table) {
+		String query="SELECT * FROM "+table+" LIMIT 0";
+		ResultSet rs;
+		PreparedStatement ps;
+		try {
+			ps=mysql.getConn().prepareStatement(query);
+			rs=ps.executeQuery();
+			
+			ps.close();
+			rs.close();
+			return true;
+		} catch (SQLException e) {
+			return false;
+		}
+    }
+    
     public synchronized void addBod(String nick, int bodu) {
-    	try {    		    		
-			String query="SELECT id FROM nicks WHERE LOWER(nick)=LOWER(?)";
-    		PreparedStatement ps=mysql.getConn().prepareStatement(query);
-    		ps.setString(1,nick);
-    		ResultSet rs=ps.executeQuery();
-
-    		rs.next();
-			int id;
+    	try {
+    		ResultSet rs;
+    		PreparedStatement ps;
+    		String query;
+    		
+    		int nick_id;
 			try {
-				id = rs.getInt("id");
-			} catch (java.sql.SQLException se) {
-	    		PreparedStatement ps2;
+				nick_id = getIdByNick(nick);
+				mysql.query("UPDATE nicks SET body=body+"+bodu+" WHERE id="+nick_id);				
+			} catch (java.sql.SQLException e) {
 				query="INSERT INTO nicks (nick,body) VALUES (?,?)";
-	    		ps2=mysql.getConn().prepareStatement(query);
-	    		ps2.setString(1,nick);
+	    		ps=mysql.getConn().prepareStatement(query);
+	    		ps.setString(1,nick);
+	    		ps.setInt(2,bodu);
+	    		ps.executeUpdate();
+				ps.close();
+				
+				nick_id=getIdByNick(nick);
+			}
+
+			// mesicni bodovani
+    		String mesic;
+    		Calendar now = Calendar.getInstance();
+    		mesic = 
+    			Integer.toString(now.get(Calendar.YEAR))
+    		    +"_"+
+    			Integer.toString(now.get(Calendar.DAY_OF_MONTH));
+    		
+    		if (!tableExists("score_"+mesic)) {
+    			mysql.query("CREATE TABLE score_"+mesic+" (id int AUTO_INCREMENT PRIMARY KEY, nick int, body int)");
+    		}
+
+			query="SELECT id FROM score_"+mesic+" WHERE nick=?";
+    		ps=mysql.getConn().prepareStatement(query);
+    		ps.setInt(1,nick_id);
+    		rs=ps.executeQuery();
+    		rs.next();
+
+    		try {
+				int id = rs.getInt("id");
+				mysql.query("UPDATE score_"+mesic+" SET body=body+"+bodu+" WHERE id="+id);				
+			} catch (java.sql.SQLException se) {
+				query="INSERT INTO score_"+mesic+" (nick,body) VALUES (?,?)";
+	    		PreparedStatement ps2=mysql.getConn().prepareStatement(query);
+	    		ps2.setInt(1,nick_id);
 	    		ps2.setInt(2,bodu);
 	    		ps2.executeUpdate();
-	    		ps2.clearParameters();
 				ps2.close();
-	    		id=0;
 			}
 			rs.close();
 			ps.close();
-			if (id!=0) {
-				mysql.query("UPDATE nicks SET body=body+"+bodu+" WHERE id="+id);				
-			}
-		} catch (Exception e) {
+			
+			
+    	} catch (Exception e) {
 			e.printStackTrace();
 		}
     }
@@ -588,7 +644,6 @@ public class IRC extends PircBot {
 				int pocet=rs.getInt("pocet");
 				rs.close();
 				ps.close();
-				System.out.println(Integer.toString(pocet));
 				if (pocet==0) {
 			    	sendMessage(channel,"Došli otázky, jedeme od znova!");
 					mysql.query("UPDATE otazky SET last=NULL");
