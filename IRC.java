@@ -637,7 +637,7 @@ public class IRC extends PircBot {
 			
 			try {
 				// overeni jestli jiz neprobehly vsechny otazky
-				String query="SELECT COUNT(*) AS pocet FROM otazky WHERE last IS NULL";
+				String query="SELECT COUNT(*) AS pocet FROM otazky WHERE schvaleni=0 AND last IS NULL";
 				PreparedStatement ps=mysql.getConn().prepareStatement(query);
 				ResultSet rs=ps.executeQuery();
 				rs.next();
