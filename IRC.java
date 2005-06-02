@@ -485,7 +485,7 @@ public class IRC extends PircBot {
     		mesic = 
     			Integer.toString(now.get(Calendar.YEAR))
     		    +"_"+
-    			Integer.toString(now.get(Calendar.DAY_OF_MONTH));
+    			Integer.toString(now.get(Calendar.MONTH));
     		
     		if (!tableExists("score_"+mesic)) {
     			mysql.query("CREATE TABLE score_"+mesic+" (id int AUTO_INCREMENT PRIMARY KEY, nick int, body int)");
