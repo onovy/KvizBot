@@ -645,7 +645,7 @@ public class IRC extends PircBot {
 				rs.close();
 				ps.close();
 				if (pocet==0) {
-			    	sendMessage(channel,"Došli otázky, jedeme od znova!");
+			    	sendMessage(channel,"Došly otázky, jedeme od znova!");
 					mysql.query("UPDATE otazky SET last=NULL");
 				}
 			} catch (SQLException e) {
