@@ -10,8 +10,8 @@ import java.util.regex.*;
  * @author NOMI team
  */
 public class StripHC {
-	 private static String asc = "aacdeeillnorstuuuyzAACDEEILLNORSTUIYZ";
-	 private static String iso = "áäčďéěíĺľňóřšťúůüýžÁÄČĎÉĚÍĹĽŇÓŘŠŤÚŮÝŽ";
+	 private static String asc = "aacdeeeillnorstuuuyzAACDEEILLNORSTUIYZ";
+	 private static String iso = "áäčďéěëíĺľňóřšťúůüýžÁÄČĎÉĚÍĹĽŇÓŘŠŤÚŮÝŽ";
 
 	 /**
 	  * prevadi string s ceskymi diakritickymi znaky na znaky bez diakritiky

@@ -39,13 +39,11 @@ public class IRC extends PircBot {
 	private String welcomeMessage2;
 	private int otazka_delay=20;
 	private char napoveda_char='#';
-	private Random random;
 	private MySQL mysql;
 	private String channel;
 	private long napoveda_last;
 	private Timer timerNapoveda;
 	private Timer timerNewOtazka;
-	private boolean online_reload=false;
 	private static final String[] napoveda_chars=
 			{"q","w","e","r","t","y","u","i","o","p",
 		     "a","s","d","f","g","h","j","k","l",

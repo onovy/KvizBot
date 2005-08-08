@@ -26,7 +26,6 @@ public class KvizBot {
 		String irc_channel = "";
 		String irc_server = "";
 		int irc_port = 0;
-		String irc_nick = "";
 		String irc_pass = "";
 		
 		// nacteni konfigurace
