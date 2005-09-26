@@ -467,7 +467,7 @@ public class IRC extends PircBot {
 				nick_id = getIdByNick(nick);
 				mysql.query("UPDATE nicks SET body=body+"+bodu+" WHERE id="+nick_id);				
 			} catch (java.sql.SQLException e) {
-				query="INSERT INTO nicks (nick,body) VALUES (?,?)";
+				query="INSERT INTO nicks (nick,body,added) VALUES (?,?,now())";
 	    		ps=mysql.getConn().prepareStatement(query);
 	    		ps.setString(1,nick);
 	    		ps.setInt(2,bodu);
