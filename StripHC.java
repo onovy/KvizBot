@@ -10,7 +10,7 @@ import java.util.regex.*;
  * @author NOMI team
  */
 public class StripHC {
-	 private static String asc = "aacdeeeillnorstuuuyzAACDEEILLNORSTUIYZ";
+	 private static String asc = "aacdeeeillnorstuuuyzAACDEEILLNORSTUUYZ";
 	 private static String iso = "áäčďéěëíĺľňóřšťúůüýžÁÄČĎÉĚÍĹĽŇÓŘŠŤÚŮÝŽ";
 
 	 /**
