@@ -112,6 +112,13 @@ public class IRC extends PircBot {
 			return false;
 		}
 	}
+	protected void onNotice(String sourceNick,
+            String sourceLogin,
+            String sourceHostname,
+            String target,
+            String notice) {
+		System.out.println("NOTICE from " +sourceNick + ": " + notice);
+	}
 	
 	public synchronized void onKick(String channel, String kickerNick, String kickerLogin, String kickerHostname, String recipientNick, String reason) {
 		if (recipientNick.equalsIgnoreCase(getNick())) {
