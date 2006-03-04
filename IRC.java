@@ -349,7 +349,7 @@ public class IRC extends PircBot {
     
     public synchronized void newOtazka_reall() {
 		try {
-				String query = "SELECT id,otazka,odpoved FROM otazky WHERE schvaleni=0 ORDER BY last,RAND() LIMIT 1";
+				String query = "SELECT id,otazka,odpoved FROM otazky WHERE schvaleni=0 AND last IS NULL ORDER BY RAND() LIMIT 1";
 				
 				PreparedStatement ps=mysql.getConn().prepareStatement(query);
 				ResultSet rs = ps.executeQuery();
