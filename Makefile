@@ -1,4 +1,9 @@
+all: org/nomi/pircbotNg/PircBotNg.class nomi/kvizbot/KvizBot.class
+
 nomi/kvizbot/KvizBot.class: $(shell find nomi/kvizbot/ -name '*.java')
+	javac -encoding UTF-8 $^
+
+org/nomi/pircbotNg/PircBotNg.class: $(shell find org/nomi/pircbotNg/ -name '*.java')
 	javac -encoding UTF-8 $^
 
 KvizBot.jar: nomi/kvizbot/KvizBot.class

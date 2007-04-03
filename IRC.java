@@ -13,14 +13,14 @@ import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.jibble.pircbot.*;
+import org.nomi.pircbotNg.*;
 import nomi.kvizbot.StripHC;
 import java.util.Properties;
 
 /**
  * @author NOMI team
  */
-public class IRC extends PircBot {
+public class IRC extends PircBotNg {
 
 	private String otazka="";
 	private int otazka_id=0;
@@ -66,7 +66,7 @@ public class IRC extends PircBot {
 			System.exit(-1);
 		}
 		setMessageDelay(0);
-		
+		setVerbose(true);
 		timerNewOtazka = new Timer();
 	}
 	
@@ -119,6 +119,12 @@ public class IRC extends PircBot {
             String notice) {
 		System.out.println("NOTICE from " +sourceNick + ": " + notice);
 	}
+
+	protected void onPrivateMessage(String sender,
+	    String login, String hostname, String message) {
+		System.out.println("PRIVMSG from " + sender + ": " + message);
+	}
+
 	
 	public synchronized void onKick(String channel, String kickerNick, String kickerLogin, String kickerHostname, String recipientNick, String reason) {
 		if (recipientNick.equalsIgnoreCase(getNick())) {
@@ -127,8 +133,8 @@ public class IRC extends PircBot {
 	}
 	
 	public synchronized void onConnect() {
-		sendRawLine("/SET IDLE_INTERVAL 720");		
-		sendRawLine("/SET RECV_INTERVAL 1");		
+		sendRawLine("SET IDLE_INTERVAL 720");		
+		sendRawLine("SET RECV_INTERVAL 1");		
 	}
 	
 	public synchronized void onDisconnect() {
@@ -349,8 +355,8 @@ public class IRC extends PircBot {
     
     public synchronized void newOtazka_reall() {
 		try {
-				String query = "SELECT id,otazka,odpoved FROM otazky WHERE schvaleni=0 AND last IS NULL ORDER BY RAND() LIMIT 1";
-				
+				String query = "SELECT id,otazka,odpoved FROM otazky WHERE schvaleni=0 AND last IS NULL AND (game & 1) != 0 ORDER BY RAND() LIMIT 1";
+
 				PreparedStatement ps=mysql.getConn().prepareStatement(query);
 				ResultSet rs = ps.executeQuery();
 			
@@ -642,7 +648,7 @@ public class IRC extends PircBot {
 			
 			try {
 				// overeni jestli jiz neprobehly vsechny otazky
-				String query="SELECT COUNT(*) AS pocet FROM otazky WHERE schvaleni=0 AND last IS NULL";
+				String query="SELECT COUNT(*) AS pocet FROM otazky WHERE schvaleni=0 AND last IS NULL AND (game & 1) != 0 ";
 				PreparedStatement ps=mysql.getConn().prepareStatement(query);
 				ResultSet rs=ps.executeQuery();
 				rs.next();
@@ -659,5 +665,17 @@ public class IRC extends PircBot {
 			
 			newOtazka_reall();
         }
+    }
+
+    protected void onVersion(String sourceNick, String sourceLogin, String sourceHostname, String target) {
+    }
+    
+    protected void onPing(String sourceNick, String sourceLogin, String sourceHostname, String target, String pingValue) {
+    }
+
+    protected void onTime(String sourceNick, String sourceLogin, String sourceHostname, String target) {
+    }
+    
+    protected void onFinger(String sourceNick, String sourceLogin, String sourceHostname, String target) {
     }
 } 

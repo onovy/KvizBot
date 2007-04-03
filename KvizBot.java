@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
-import org.jibble.pircbot.IrcException;
-import org.jibble.pircbot.NickAlreadyInUseException;
+import org.nomi.pircbotNg.IrcException;
+import org.nomi.pircbotNg.NickAlreadyInUseException;
 
 /**
  * @author NOMI team
