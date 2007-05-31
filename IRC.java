@@ -240,14 +240,20 @@ public class IRC extends PircBotNg {
 			}
 			
         	if (message.equals(odpoved_shc)) {
-        		timerNapoveda.cancel();
+			boolean blocked = false;
+			try {
+			    blocked = getBlockedByNick(sender);
+    			} catch (Exception e) {}
+			if (!blocked) {
+        		    timerNapoveda.cancel();
         		
-        		int bodu=napoveda_count-napoveda_num+1;
+        		    int bodu=napoveda_count-napoveda_num+1;
         			
-        		sendMessage(channel,"*52* To je ono "+sender+", správná odpověď na otázku číslo "+otazka_id+" je "+odpoved+". Získáváš "+bodu+" bod"+word_ending3(bodu)+" *52*");
-        		addBod(sender,bodu);
-        		showPlayerInfo(sender);
-            	newOtazka();
+        		    sendMessage(channel,"*52* To je ono "+sender+", správná odpověď na otázku číslo "+otazka_id+" je "+odpoved+". Získáváš "+bodu+" bod"+word_ending3(bodu)+" *52*");
+        		    addBod(sender,bodu);
+        		    showPlayerInfo(sender);
+            		    newOtazka();
+			}
         	}
     	}
     	
@@ -451,6 +457,18 @@ public class IRC extends PircBotNg {
 		rs.close();
 		ps.close();
 		return id;
+    }
+    
+    public boolean getBlockedByNick(String nick) throws java.sql.SQLException {
+		String query="SELECT blocked FROM nicks WHERE LOWER(nick)=LOWER(?)";
+		PreparedStatement ps=mysql.getConn().prepareStatement(query);
+		ps.setString(1,nick);
+		ResultSet rs=ps.executeQuery();
+		rs.next();
+		boolean blocked = rs.getBoolean("blocked");
+		rs.close();
+		ps.close();
+		return blocked;
     }
     
     public boolean tableExists(String table) {
