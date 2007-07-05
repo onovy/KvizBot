@@ -355,12 +355,27 @@ public class IRC extends PircBotNg {
 		odpoved="";
 		if (timerNapoveda!=null) {
 			timerNapoveda.cancel();
-		}
+		}	
         timerNewOtazka.schedule(new TimerNewOtazka(), otazka_delay*1000);
     }
     
     public synchronized void newOtazka_reall() {
 		try {
+				// Registrace
+				String queryr = "SELECT pass_req.id, nicks.nick, hash FROM pass_req JOIN nicks ON (nicks.id = pass_req.nick) WHERE sent = false";
+				PreparedStatement psr=mysql.getConn().prepareStatement(queryr);
+				ResultSet rsr = psr.executeQuery();		
+			    	while (rsr.next()) {
+				    sendMessage(rsr.getString("nick"), "Aktivace registrace: http://www.xkviz.net/registrace.htm/" + rsr.getString("hash"));
+				    String queryrs = "UPDATE pass_req SET sent = true WHERE id = ?";
+				    PreparedStatement psrs=mysql.getConn().prepareStatement(queryrs);
+				    psrs.setInt(1, rsr.getInt("id"));
+				    psrs.executeUpdate();
+				    psrs.close();
+				}
+				rsr.close();
+				psr.close();
+				
 				String query = "SELECT id,otazka,odpoved FROM otazky WHERE schvaleni=0 AND last IS NULL AND (game & 1) != 0 ORDER BY RAND() LIMIT 1";
 
 				PreparedStatement ps=mysql.getConn().prepareStatement(query);
