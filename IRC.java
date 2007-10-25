@@ -591,11 +591,19 @@ public class IRC extends PircBotNg {
     		int behind_body;
     		String msg;
 
+		// mesicni bodovani
+    		String mesic;
+    		Calendar now = Calendar.getInstance();
+    		mesic = 
+    			Integer.toString(now.get(Calendar.YEAR))
+    		    +"_"+
+    			Integer.toString(now.get(Calendar.MONTH));
+		
     		String query;
     		PreparedStatement ps;
 			ResultSet rs;
-			
-    		query="SELECT body FROM nicks WHERE nick=?";
+
+    		query="SELECT s.body FROM nicks n JOIN score_"+mesic+" s ON (s.nick = n.id) WHERE n.nick=?";
     		ps=mysql.getConn().prepareStatement(query);
     		ps.setString(1,nick);
     		rs=ps.executeQuery();
@@ -604,7 +612,7 @@ public class IRC extends PircBotNg {
     		rs.close();
     		ps.close();
     		
-    		query="SELECT COUNT(*)+1 AS pozice FROM nicks WHERE body>?";
+    		query="SELECT COUNT(*)+1 AS pozice FROM nicks n JOIN score_"+mesic+" s ON (s.nick = n.id) WHERE s.body>?";
     		ps=mysql.getConn().prepareStatement(query);
 			ps.setInt(1,body);
 			rs=ps.executeQuery();
@@ -615,7 +623,7 @@ public class IRC extends PircBotNg {
 
     		msg="*28* "+nick+" je na "+pozice+". místě s "+body+" bod"+word_ending7(body);
     		
-			query="SELECT nick,body FROM nicks WHERE (body>? OR body=?) AND nick!=? ORDER BY body LIMIT 0,1";
+			query="SELECT n.nick,s.body FROM nicks n JOIN score_"+mesic+" s ON (s.nick = n.id) WHERE (s.body>? OR s.body=?) AND n.nick!=? ORDER BY s.body LIMIT 0,1";
 			ps=mysql.getConn().prepareStatement(query);
 			ps.setInt(1,body);
 			ps.setInt(2,body);
