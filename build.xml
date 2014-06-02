@@ -1,0 +1,39 @@
+<project name="fopserver" default="dist" basedir=".">
+	<description>
+		KvizBot
+	</description>
+
+	<property file="build.properties" />
+
+	<target name="init">
+		<tstamp/>
+
+		<mkdir dir="${build}"/>
+	</target>
+
+	<target name="compile" depends="init">
+
+		<javac srcdir="${src}" destdir="${build}">
+			<classpath>
+				<fileset dir="lib">
+					<include name="**.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="dist" depends="compile">
+		<mkdir dir="${dist}"/>
+
+		<jar jarfile="${dist}/KvizBot.jar" basedir="${build}">
+			<manifest>
+				<attribute name="Main-Class" value="KvizBot"/>
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="clean">
+		<delete dir="${build}"/>
+		<delete dir="${dist}"/>
+	</target>
+</project>
