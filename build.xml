@@ -27,7 +27,7 @@
 
 		<jar jarfile="${dist}/KvizBot.jar" basedir="${build}">
 			<manifest>
-				<attribute name="Main-Class" value="KvizBot"/>
+				<attribute name="Main-Class" value="nomi.kvizbot.KvizBot" />
 			</manifest>
 		</jar>
 	</target>
