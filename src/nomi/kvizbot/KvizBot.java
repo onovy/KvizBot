@@ -72,7 +72,7 @@ public class KvizBot {
 			mysql = new MySQL(db_host,db_name,db_user,db_pass);
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.exit(0);
+			System.exit(-1);
 		}
 
 		// pripojeni k IRC
