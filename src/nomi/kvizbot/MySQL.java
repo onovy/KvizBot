@@ -22,53 +22,44 @@ import java.sql.*;
 public class MySQL {
 	
 	private Connection con=null;
+	private String url=null;
+	private String user=null;
+	private String pass=null;
 	
 	/**
 	   * Returns a connection to the MySQL database
 	   *
 	   */
 	public MySQL ( String host, String database, String user, String pass) throws Exception {
+		this.url = "jdbc:mysql://" + host + "/" + database + "?characterEncoding=iso8859_2&useUnicode=true&useSSL=false&autoReconnect=true";
+		this.user = user;
+		this.pass = pass;
+		this.connect();
+	}
+
+	private void connect() throws SQLException {
 		try {
-			testDriver();
-		} catch (Exception e) {
+			this.con = DriverManager.getConnection(this.url, this.user, this.pass);
+		} catch (java.sql.SQLException e) {
+			System.out.println("Connection couldn't be established to " + this.url);
 			throw(e);
 		}
-		String url = "";
-		try {
-			url = "jdbc:mysql://" + host + "/" + database + "?characterEncoding=iso8859_2&useUnicode=true";
-			con = DriverManager.getConnection(url,user,pass);
-	    } catch ( java.sql.SQLException e ) {
-	    System.out.println("Connection couldn't be established to " + url);
-	    throw ( e );
-	    }
-	  }
-	
-	 
-	  /**
-	   * Checks whether the MySQL JDBC Driver is installed
-	   */
-	  protected void testDriver () throws Exception {
-	    try {
-	      Class.forName ( "org.gjt.mm.mysql.Driver" );
-	    } catch ( java.lang.ClassNotFoundException e ) {
-	      System.out.println("MySQL JDBC Driver not found ... ");
-	      throw ( e );
-	    }
-	  }
-	  
+	}
+
 	  /**
 	   * This method executes an SQL query
 	   * @param query query to execute
 	   */
 	  protected void query ( String query )
-	     throws SQLException {  
-	  
+	     throws SQLException {
+
 	    try {
 	      PreparedStatement s = con.prepareStatement(query);
 	      s.execute();
 	      s.close();
 	    } catch ( SQLException e ) {
 	      System.out.println("Error executing SQL query "+query);
+	      this.connect();
 	      throw (e);
 	    }
 	  }
