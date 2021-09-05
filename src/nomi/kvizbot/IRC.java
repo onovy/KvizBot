@@ -442,6 +442,7 @@ public class IRC extends PircBotNg {
 				sendMessage(channel,"*29* Nápověda (0/"+napoveda_count+"): "+napoveda+" *29*");
 		} catch (Exception e1) {
 			e1.printStackTrace();
+                        timerNewOtazka.schedule(new TimerNewOtazka(), otazka_delay*1000);
 		}    
     }
     
