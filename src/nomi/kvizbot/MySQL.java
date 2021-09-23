@@ -31,7 +31,7 @@ public class MySQL {
 	   *
 	   */
 	public MySQL ( String host, String database, String user, String pass) throws Exception {
-		this.url = "jdbc:mysql://" + host + "/" + database + "?characterEncoding=iso8859_2&useUnicode=true&useSSL=false&autoReconnect=true";
+		this.url = "jdbc:mysql://" + host + "/" + database + "?useUnicode=true&useSSL=false&autoReconnect=true";
 		this.user = user;
 		this.pass = pass;
 		this.connect();
